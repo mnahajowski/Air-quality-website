@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  dbserver:
+    build:
+      context: ./db
+      dockerfile: .Dockerfile
+    volumes:
+     - /var/lib/postgresql/data
+    networks:
+      - main-network
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+
+networks:
+  main-network:
+    driver: bridge
