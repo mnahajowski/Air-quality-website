@@ -13,6 +13,15 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
 
+  data_source:
+    build:
+      context: ./data_source
+      dockerfile: .Dockerfile
+    depends_on:
+      - dbserver
+    networks:
+      - main-network
+
 networks:
   main-network:
     driver: bridge
