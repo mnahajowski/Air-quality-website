@@ -1,0 +1,6 @@
+psycopg2==2.8.6
+requests==2.25.1
+beautifulsoup4==4.9.3
+webdriver-manager==3.3.0
+selenium==3.141.0
+schedule==1.0.0
