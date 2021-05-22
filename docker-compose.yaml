@@ -4,7 +4,7 @@ services:
   dbserver:
     build:
       context: ./db
-      dockerfile: .Dockerfile
+      dockerfile: db/Dockerfile
     volumes:
      - /var/lib/postgresql/data
     networks:
@@ -16,11 +16,36 @@ services:
   data_source:
     build:
       context: ./data_source
-      dockerfile: .Dockerfile
+      dockerfile: data_source/Dockerfile
     depends_on:
       - dbserver
     networks:
       - main-network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    depends_on:
+      - data_source
+      - dbserver
+    ports:
+      - 80:80
+    networks:
+      - main-network
+    environment:
+      MAPS_API_KEY: 414d354acb344126b56c4642315f0f91
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    networks:
+      - main-network
+    ports:
+      - 8080:8080
 
 networks:
   main-network:

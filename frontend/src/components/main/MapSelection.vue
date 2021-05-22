@@ -68,7 +68,7 @@ export default {
       document.querySelector("p.placeholder-img").style.display = "none";
       document.querySelector(
         ".generated-map-img"
-      ).src = `http://localhost:80/map/?&rect=${rect}&param=${this.param}&segments_x=${this.segments}&width=1600&date=${datetime}`;
+      ).src = `http://api:80/map/?&rect=${rect}&param=${this.param}&segments_x=${this.segments}&width=1600&date=${datetime}`;
       document.getElementById("generated-map").scrollIntoView({behavior: 'smooth', block: "start"});
     },
   },
