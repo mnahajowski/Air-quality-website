@@ -1,0 +1,6 @@
+psycopg2==2.8.6
+fastapi==0.63.0
+requests==2.25.1
+Pillow==8.2.0
+aiofiles==0.6.0
+PyYAML==5.4.1
