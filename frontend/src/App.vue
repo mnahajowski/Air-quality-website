@@ -2,6 +2,9 @@
   <div id="app" style="margin: 0px; padding: 0px;">
     <Navbar/>
     <router-view></router-view>
+    <footer>
+      <p>&copy; Marcin Nahajowski Maciej Markiewicz 2021</p>
+    </footer>
   </div>
 </template>
 
@@ -28,6 +31,24 @@ body {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+footer {
+  position: relative;
+  background-color: #013d3c;
+  height: 80px;
+  width: 100%;
+}
+
+footer p {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
 }
 
 

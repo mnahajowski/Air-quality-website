@@ -15,16 +15,20 @@
     </div>
 
     <MapSelection />
+    <MapDetails />
+
   </div>
 </template>
 
 <script>
 import MapSelection from "@/components/main/MapSelection.vue";
+import MapDetails from "@/components/main/MapDetails.vue"
 
 export default {
   name: "Main",
   components: {
     MapSelection,
+    MapDetails
   },
 };
 </script>
@@ -69,4 +73,5 @@ export default {
   width: 100%;
   height: 100vh;
 }
+
 </style>

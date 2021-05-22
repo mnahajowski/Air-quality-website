@@ -1,33 +1,77 @@
 <template>
-  <div id="map-selection">
-    <h1>Sprawdź jakość powietrza w swojej okolicy</h1>
-    <div class="section-wrapper">
-      <section id="map-selection-instruction">
-        <p class="center-absolute">
-          Zaznacz na mapie region, dla którego chcesz wygenerować mapę jakości
-          powietrza. Wybierz dodatkowe opcje, aby dokładniej zdefiniować liczbę
-          segmentów, rodzaj mierzonego zanieczyszczenia oraz ramy czasowe w
-          jakich przeprowadzane były pomiary.
-        </p>
-      </section>
-      <section id="map-selection-map">
-        <img
-          class="map-image center-absolute"
-          src="../../../img/wiatraki.jpg"
-        />
-        <div id="map-options-buttons">
-          <button>Generuj</button>
-          <button>Opcje</button>
-        </div>
-      </section>
+  <div>
+    <div id="map-selection">
+      <h1>Sprawdź jakość powietrza w swojej okolicy</h1>
+      <div class="section-wrapper">
+        <section id="map-selection-instruction">
+          <p class="center-absolute">
+            Zaznacz na mapie region, dla którego chcesz wygenerować mapę jakości
+            powietrza. Wybierz dodatkowe opcje, aby dokładniej zdefiniować
+            liczbę segmentów, rodzaj mierzonego zanieczyszczenia oraz ramy
+            czasowe w jakich przeprowadzane były pomiary.
+          </p>
+        </section>
+        <section id="map-selection-map">
+          <Map
+            class="map-image center-absolute"
+            @lat-lon-coordinates="registerCords"
+          />
+          <div id="map-options-buttons">
+            <button v-on:click="fetchMap">Generuj</button>
+            <button v-on:click="openOptionsModal">Opcje</button>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="generated-map">
+      <img class="generated-map-img"/>
+      <img class="placeholder-img"/>
+      <p class="placeholder-img">Wygeneruj mapę</p>
     </div>
   </div>
 </template>
 
 <script>
+import Map from "@/components/main/Map.vue";
 export default {
   name: "MapSelection",
-  components: {},
+  components: {
+    Map,
+  },
+  data() {
+    return {
+      latLon: [],
+      param: "pm25",
+      time: "latest",
+      segments: "8",
+    };
+  },
+  methods: {
+    openOptionsModal() {
+      document.getElementById("map-details").style.display = "initial";
+    },
+
+    registerCords(cords) {
+      this.latLon = cords[0];
+    },
+
+    registerMapDetails(details) {
+      this.param = details.param;
+      this.time = details.time;
+      this.segments = details.segments;
+    },
+
+    fetchMap() {
+      var rect = `${this.latLon[0].lat},${this.latLon[0].lng},${this.latLon[2].lat},${this.latLon[2].lng}`;
+      var datetime = this.time.replace(" ", "T");
+      document.querySelector("img.placeholder-img").style.display = "none";
+      document.querySelector("p.placeholder-img").style.display = "none";
+      document.querySelector(
+        ".generated-map-img"
+      ).src = `http://localhost:80/map/?&rect=${rect}&param=${this.param}&segments_x=${this.segments}&width=1600&date=${datetime}`;
+      document.getElementById("generated-map").scrollIntoView({behavior: 'smooth', block: "start"});
+    },
+  },
 };
 </script>
 
@@ -57,7 +101,7 @@ export default {
   position: relative;
 }
 
-section {
+#map-selection section {
   height: 100%;
   position: relative;
   width: 50%;
@@ -114,5 +158,43 @@ section {
   height: 450px;
   width: 450px;
   box-shadow: 10px 5px 5px black;
+}
+
+#generated-map {
+  width: 100%;
+  min-height: calc(100vh - 160px);
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  background-color: black;
+
+}
+
+.generated-map-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: calc(100vh - 160px);
+  max-width: 100%;
+  margin: 0 auto;
+  z-index: 3;
+  
+}
+
+.placeholder-img {
+  background-color: #bbbbbb;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: calc(100vh - 200px);
+  width: 75%;
+}
+
+p.placeholder-img {
+  height: auto;
+  font-size: 40px;
+  color: black;
 }
 </style>
