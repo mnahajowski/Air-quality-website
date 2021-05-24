@@ -23,6 +23,9 @@
         </section>
       </div>
     </div>
+
+    <MapDetails @details-data="registerMapDetails"/>
+
     <div id="generated-map">
       <img class="generated-map-img"/>
       <img class="placeholder-img"/>
@@ -33,10 +36,13 @@
 
 <script>
 import Map from "@/components/main/Map.vue";
+import MapDetails from "@/components/main/MapDetails.vue"
+
 export default {
   name: "MapSelection",
   components: {
     Map,
+    MapDetails
   },
   data() {
     return {

@@ -15,14 +15,12 @@
     </div>
 
     <MapSelection />
-    <MapDetails />
 
   </div>
 </template>
 
 <script>
 import MapSelection from "@/components/main/MapSelection.vue";
-import MapDetails from "@/components/main/MapDetails.vue"
 
 export default {
   name: "Main",
