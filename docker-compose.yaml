@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
      - /var/lib/postgresql/data
-    networks:
-      - main-network
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
@@ -19,8 +17,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - dbserver
-    networks:
-      - main-network
 
   api:
     build:
@@ -31,8 +27,6 @@ services:
       - dbserver
     ports:
       - 80:80
-    networks:
-      - main-network
     environment:
       MAPS_API_KEY: 414d354acb344126b56c4642315f0f91
 
@@ -42,11 +36,5 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - api
-    networks:
-      - main-network
     ports:
       - 8080:8080
-
-networks:
-  main-network:
-    driver: bridge
