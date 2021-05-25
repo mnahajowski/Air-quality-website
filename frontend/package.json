@@ -9,8 +9,12 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "leaflet": "^1.7.1",
+    "leaflet-draw": "^1.0.4",
     "vue": "^2.6.11",
-    "vue-router": "^3.5.1"
+    "vue-intellisense": "^0.3.0",
+    "vue-router": "^3.5.1",
+    "vue2-datepicker": "^3.9.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
