@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-
+import pytz
 from map import get_map
 from validator import validate_params
 
@@ -23,7 +23,8 @@ async def map_root(rect: str, width: int = 800, param: str = 'pm25', date: str =
     :return: map as a png file
     """
     if date == 'latest':
-        date = datetime.now().strftime("%Y-%m-%dT%H:00:00")
+        tz = pytz.timezone("Europe/Warsaw")
+        date = tz.fromutc(datetime.now()).strftime("%Y-%m-%dT%H:00:00")
 
     validate_params(rect, width, param, date, segments_x)
 

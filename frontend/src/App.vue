@@ -22,8 +22,8 @@ html,
 body {
     font: 300 12px "Roboto";
     color: white;
-    /* background-color: #263838; */
-    background-image: url("../img/background.jpg");
+    /* background-color: #332f52; */
+    background-image: url("../img/dywan3.jpg");
     
 }
 

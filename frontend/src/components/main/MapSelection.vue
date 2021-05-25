@@ -17,7 +17,7 @@
             @lat-lon-coordinates="registerCords"
           />
           <div id="map-options-buttons">
-            <button v-on:click="fetchMap">Generuj</button>
+            <button v-on:click="fetchMap" id="generate-button" disabled=true>Generuj</button>
             <button v-on:click="openOptionsModal">Opcje</button>
           </div>
         </section>
@@ -58,6 +58,8 @@ export default {
     },
 
     registerCords(cords) {
+      document.getElementById("generate-button").disabled = false;
+      document.getElementById("generate-button").style.cursor = "pointer";
       this.latLon = cords[0];
     },
 
@@ -69,12 +71,16 @@ export default {
 
     fetchMap() {
       var rect = `${this.latLon[0].lat},${this.latLon[0].lng},${this.latLon[2].lat},${this.latLon[2].lng}`;
+      
+      if (this.time == undefined)
+        this.time = 'latest';
+
       var datetime = this.time.replace(" ", "T");
       document.querySelector("img.placeholder-img").style.display = "none";
       document.querySelector("p.placeholder-img").style.display = "none";
       document.querySelector(
         ".generated-map-img"
-      ).src = `http://api:80/map/?&rect=${rect}&param=${this.param}&segments_x=${this.segments}&width=1600&date=${datetime}`;
+      ).src = `http://localhost:80/map/?&rect=${rect}&param=${this.param}&segments_x=${this.segments}&width=1600&date=${datetime}`;
       document.getElementById("generated-map").scrollIntoView({behavior: 'smooth', block: "start"});
     },
   },
@@ -184,7 +190,8 @@ export default {
   max-height: calc(100vh - 160px);
   max-width: 100%;
   margin: 0 auto;
-  z-index: 3;
+  z-index: 2;
+  background-color: white;
   
 }
 
@@ -203,4 +210,9 @@ p.placeholder-img {
   font-size: 40px;
   color: black;
 }
+
+#generate-button {
+  cursor: default;
+}
+
 </style>

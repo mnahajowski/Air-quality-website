@@ -27,7 +27,7 @@
       </section>
       <section id="time-section">
         <p>Wybierz datę i godzinę</p>
-        <date-picker v-model="pollutionTime" type="datetime" value-type="format" format="DD-MM-YYYY HH:00"></date-picker>
+        <date-picker v-model="pollutionTime" type="datetime" value-type="format" format="YYYY-MM-DD HH:00:00"></date-picker>
         <button id="confirm-button" v-on:click="closeOptionsModal">OK</button>
       </section>
     </div>

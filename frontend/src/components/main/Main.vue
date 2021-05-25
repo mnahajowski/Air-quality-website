@@ -25,8 +25,7 @@ import MapSelection from "@/components/main/MapSelection.vue";
 export default {
   name: "Main",
   components: {
-    MapSelection,
-    MapDetails
+    MapSelection
   },
 };
 </script>
