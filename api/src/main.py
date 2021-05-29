@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 import pytz
@@ -43,11 +43,16 @@ async def stations():
 
 
 @app.get("/stations/data/")
-async def stations(id: int, date_from: str, date_to: str, param: str = 'pm25'):
+async def stations(id: int, date_from: str = None, date_to: str = None, param: str = 'pm25'):
     """
     Get pollution data for a specific station and a date range
     :return: json of format {"data": [{date, time, value}, ...]
     """
+    if not date_from or not date_to:
+        now = datetime.now()
+        date_from = (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:00:00")
+        date_to = now.strftime("%Y-%m-%dT%H:00:00")
+
     return {"stations": get_station_data(id, date_from, date_to, param)}
 
 
