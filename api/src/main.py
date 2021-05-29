@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 import pytz
 from map import get_map
+from data import get_stations, get_station_data
 from validator import validate_params
 
 app = FastAPI()
@@ -32,10 +33,28 @@ async def map_root(rect: str, width: int = 800, param: str = 'pm25', date: str =
                              headers={'Content-Disposition': f'inline; filename="map.png"'})
 
 
+@app.get("/stations/all/")
+async def stations():
+    """
+    Get available stations from all time
+    :return: json of format {"stations": [{id, name, lat, lon}]
+    """
+    return {"stations": get_stations()}
+
+
+@app.get("/stations/data/")
+async def stations(id: int, date_from: str, date_to: str, param: str = 'pm25'):
+    """
+    Get pollution data for a specific station and a date range
+    :return: json of format {"data": [{date, time, value}, ...]
+    """
+    return {"stations": get_station_data(id, date_from, date_to, param)}
+
+
 @app.get("/")
 async def index():
     """
     Endpoint for the root element, redirecting to project repository
     :return: link to project repo
     """
-    return {"Api usage as described in https://github.com/MaciejMarkiewicz/air-quality"}
+    return {"Api usage as described in https://github.com/mnahajowski/Air-quality-website"}
