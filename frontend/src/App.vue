@@ -22,8 +22,8 @@ html,
 body {
     font: 300 12px "Roboto";
     color: white;
-    /* background-color: #332f52; */
-    background-image: url("../img/dywan3.jpg");
+    background-image: url("../img/dark_air_bg.jpg");
+    background-position: left;
     
 }
 

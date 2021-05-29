@@ -101,7 +101,7 @@ export default {
 
 #map-selection {
   margin: 0 auto;
-  width: 75%;
+  width: 85%;
   height: calc(100vh - 80px);
   position: relative;
   background-color: transparent;
@@ -116,21 +116,22 @@ export default {
 #map-selection section {
   height: 100%;
   position: relative;
-  width: 50%;
+  
 }
 
 #map-selection-instruction {
   float: left;
+  width: 35%;
 }
 
 #map-selection-instruction p {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: bold;
   width: 75%;
   border: solid 1px black;
   text-align: center;
-  padding: 75px;
-  border-radius: 50px;
+  padding: 40px;
+  border-radius: 30px;
   background-color: white;
   color: black;
   box-shadow: 10px 5px 5px black;
@@ -138,6 +139,7 @@ export default {
 
 #map-selection-map {
   float: right;
+  width: 65%;
 }
 
 .center-absolute {
@@ -168,7 +170,7 @@ export default {
 
 .map-image {
   height: 450px;
-  width: 450px;
+  width: 750px;
   box-shadow: 10px 5px 5px black;
 }
 
