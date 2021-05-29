@@ -1,4 +1,4 @@
-from db_connection import select
+from db_connection import select_pollution_data
 from datetime import datetime
 
 
@@ -21,9 +21,9 @@ def get_data_form_mask(segments_x, segments_y, rect, date, param):
     date_string = date.strftime("%Y.%m.%d")
     time_string = date.strftime("%H:%M:%S")
 
-    data = select((lat_1 - 3 * segment_x_size, lat_2 + 3 * segment_x_size),
-                  (lon_1 - 3 * segment_y_size, lon_2 + 3 * segment_y_size),
-                  date_string, time_string)
+    data = select_pollution_data((lat_1 - 3 * segment_x_size, lat_2 + 3 * segment_x_size),
+                                 (lon_1 - 3 * segment_y_size, lon_2 + 3 * segment_y_size),
+                                 date_string, time_string)
 
     return idw(data, param, segments_x, segments_y, lat_1, lon_1, segment_x_size, segment_y_size)
 
