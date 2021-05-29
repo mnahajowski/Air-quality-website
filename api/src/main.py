@@ -53,7 +53,7 @@ async def stations(id: int, date_from: str = None, date_to: str = None, param: s
         date_from = (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:00:00")
         date_to = now.strftime("%Y-%m-%dT%H:00:00")
 
-    return {"stations": get_station_data(id, date_from, date_to, param)}
+    return {"data": get_station_data(id, date_from, date_to, param)}
 
 
 @app.get("/")
