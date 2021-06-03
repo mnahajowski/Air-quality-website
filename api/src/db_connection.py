@@ -59,12 +59,18 @@ def select_stations_data(id_station, date_from, time_from, date_to, time_to, par
     expression = f"""SELECT measurement_date, measurement_time, {param}
                      FROM pollution
                      WHERE id_station = {id_station} AND
-                         measurement_date >= {date_from} AND measurement_time >= {time_from}
-                         measurement_date < {date_to} AND measurement_time < {time_to}"""
+                         ((measurement_date = '{date_from}' AND measurement_time >= '{time_from}' AND
+                         (measurement_date < '{date_to}' OR (measurement_date = '{date_to}'
+                         AND measurement_time < '{time_to}'))) OR 
+                         
+                         (measurement_date > '{date_from}' AND
+                         (measurement_date < '{date_to}' OR (measurement_date = '{date_to}'
+                         AND measurement_time < '{time_to}')))) ORDER BY measurement_date, measurement_time"""
 
     cursor.execute(expression)
     data = [{"date": date, 'time': time, 'value': value}
             for date, time, value in cursor.fetchall()]
+
 
     cursor.close()
     connection.close()

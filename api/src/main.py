@@ -59,7 +59,8 @@ async def stations(id: int, date_from: str = None, date_to: str = None, param: s
     :return: json of format {"data": [{date, time, value}, ...]
     """
     if not date_from or not date_to:
-        now = datetime.now()
+        tz = pytz.timezone("Europe/Warsaw")
+        now = tz.fromutc(datetime.now())
         date_from = (now - timedelta(days=1)).strftime("%Y-%m-%dT%H:00:00")
         date_to = now.strftime("%Y-%m-%dT%H:00:00")
 

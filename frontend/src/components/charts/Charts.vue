@@ -1,11 +1,14 @@
 <template>
   <div id="charts-main">
     <div class="section-wrapper">
-      <section id="generated-chart"></section>
+      <section id="generated-chart">
+        <chart :chart-data="datacollection" :styles="myStyles"></chart>
+      </section>
       <section id="station-selection-map">
         <ChartMap
           class="map-image-chart"
-          @lat-lon-coordinates="registerCords" @station-id="stationIdUpdate"
+          @lat-lon-coordinates="registerCords"
+          @station-id="stationIdUpdate"
         />
         <div id="chart-option-buttons">
           <div class="calendar">
@@ -76,7 +79,11 @@
             />
             <label for="pm25">PM2.5</label>
           </div>
-          <button v-on:click="fetchChart" id="generate-button-chart" disabled="true">
+          <button
+            v-on:click="fetchChart"
+            id="generate-button-chart"
+            disabled="true"
+          >
             Generuj
           </button>
         </div>
@@ -89,6 +96,7 @@
 import ChartMap from "@/components/charts/ChartMap.vue";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import Chart from "./Chart.js";
 // eslint-disable-next-line
 delete L.Icon.Default.prototype._getIconUrl;
 // eslint-disable-next-line
@@ -102,27 +110,67 @@ export default {
   components: {
     ChartMap,
     DatePicker,
+    Chart,
   },
   methods: {
     stationIdUpdate(stationIdUpdated) {
       this.stationId = stationIdUpdated;
     },
+    chartConstructor(chartData) {
+
+      var dataLabels = [];
+      var valueData = [];
+      var lastDate = null;
+      chartData.forEach((element) => {
+        if (lastDate != element.date) {
+          lastDate = element.date;
+          dataLabels.push(`${element.date}\n${element.time}`);
+        } 
+        else
+          dataLabels.push(element.time);
+
+        valueData.push(element.value);
+      });
+
+      this.datacollection = {
+        labels: dataLabels,
+        datasets: [
+          {
+            label: "Odczyt parametrów",
+            backgroundColor: "#4266EB",
+            data: valueData,
+          },
+        ],
+      };
+    },
 
     fetchChart() {
-      var dateStart, dateEnd
-      var urlString = `http://localhost:80/stations/data/?&id=${this.stationId}&param=${this.selectedPollutionTypeChart}`
-      if (this.time != undefined) {
-        dateStart = this.time[0].replace(" ", "T");
-        dateEnd = this.time[1].replace(" ", "T");
-        urlString += `&date_from=${dateStart}&date_to=${dateEnd}`
+      var dateStart, dateEnd;
+      var urlString = `http://localhost:80/stations/data/?&id=${this.stationId}&param=${this.selectedPollutionTypeChart}`;
+      if (this.pollutionTimeChart.length != 0) {
+        dateStart = this.pollutionTimeChart[0].replace(" ", "T");
+        dateEnd = this.pollutionTimeChart[1].replace(" ", "T");
+        urlString += `&date_from=${dateStart}&date_to=${dateEnd}`;
       }
-      
+
       fetch(urlString)
         .then((data) => data.json())
         .then((data) => {
-            console.log(data.stations)
-        }
-        );
+          this.chartConstructor(data.data);
+        });
+    },
+    fillData() {
+      this.datacollection = {
+        labels: [
+        ],
+        datasets: [
+          {
+            label: "Odczyt parametrów",
+            backgroundColor: "#4266EB",
+            data: [],
+          }
+        ],
+      };
     },
   },
   data() {
@@ -130,8 +178,20 @@ export default {
       selectedPollutionTypeChart: "pm25",
       pollutionTimeChart: [],
       stationId: null,
+      datacollection: null,
     };
   },
+  mounted() {
+    this.fillData();
+  },
+  computed: {
+    myStyles () {
+      return {
+        height: `${window.innerHeight - 160}px`,
+        position: 'relative'
+      }
+    }
+  }
 };
 </script>
 
@@ -143,6 +203,7 @@ export default {
   top: 80px;
   height: calc(100vh - 80px);
   position: relative;
+  overflow: hidden;
 }
 
 p.calendar {
@@ -162,6 +223,11 @@ p.calendar {
   position: relative;
 }
 
+chart {
+  height: 100%;
+  width: 100%;
+}
+
 .radio-buttons-pollution-type.radio-chart {
   position: absolute;
   left: 20px;
@@ -176,6 +242,8 @@ p.calendar {
 #generated-chart {
   float: left;
   width: 70%;
+  height: calc(100% - 160px);
+  position: relative;
 }
 
 .calendar {
@@ -227,10 +295,6 @@ p.calendar {
 .map-image-chart {
   height: 50%;
   width: 100%;
-}
-
-#generated-chart {
-  background-color: #bbbbbb;
 }
 
 #generate-button-chart {

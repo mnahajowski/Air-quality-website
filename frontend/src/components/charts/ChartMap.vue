@@ -53,6 +53,7 @@ export default {
       this.$emit("station-id", stationIdSelected);
       document.querySelector("p.calendar").textContent = `Wybrano stację: ${stationName}`
       document.getElementById("generate-button-chart").disabled = false;
+      document.getElementById("generate-button-chart").style.cursor = "pointer";
     },
   },
   mounted() {
