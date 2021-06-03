@@ -29,6 +29,7 @@ services:
       - 80:80
     environment:
       MAPS_API_KEY: 414d354acb344126b56c4642315f0f91
+      JWT_KEY: ee3bdc7d363b15bf6863460b0b25523f9e6a3043d7ddf837ae5a3fc58f246e99
 
   frontend:
     build:
