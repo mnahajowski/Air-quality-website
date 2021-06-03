@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       mainMap: null,
-      lastLayer: null
+      lastLayer: null,
     };
   },
   methods: {
@@ -71,14 +71,24 @@ export default {
         editableLayers.addLayer(e.layer);
         drawControlFull.remove(this.mainMap);
         this.mainMap.addControl(drawControlEditOnly);
-        this.$emit('lat-lon-coordinates', e.layer.getLatLngs());
+        this.$emit("lat-lon-coordinates", e.layer.getLatLngs());
       });
       this.mainMap.on(L.Draw.Event.DELETED, () => {
-          if (editableLayers.getLayers().length === 0) {
-              drawControlEditOnly.remove(this.mainMap);
-              this.mainMap.addControl(drawControlFull);
-          }
+        if (editableLayers.getLayers().length === 0) {
+          drawControlEditOnly.remove(this.mainMap);
+          this.mainMap.addControl(drawControlFull);
+        }
       });
+
+      fetch("http://localhost:80/stations/all")
+        .then((data) => data.json())
+        .then((data) =>
+          data.stations.forEach((station) => {
+            L.marker([station.lat, station.lon], { title: station.name }).addTo(
+              this.mainMap
+            );
+          })
+        );
     },
   },
   mounted() {

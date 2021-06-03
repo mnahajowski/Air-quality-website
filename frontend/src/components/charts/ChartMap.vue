@@ -14,8 +14,7 @@ export default {
   components: {},
   data() {
     return {
-      mainChartMap: null,
-      lastLayer: null
+      mainChartMap: null
     };
   },
   methods: {
@@ -39,7 +38,21 @@ export default {
         }
       ).addTo(this.mainChartMap);
 
-      
+      fetch("http://localhost:80/stations/all")
+        .then((data) => data.json())
+        .then((data) =>
+          data.stations.forEach((station) => {
+            L.marker([station.lat, station.lon], { title: station.name })
+              .on("click", () => this.updateSelectedMarker(station.id, station.name))
+              .addTo(this.mainChartMap);
+          })
+        );
+    },
+
+    updateSelectedMarker(stationIdSelected, stationName) {
+      this.$emit("station-id", stationIdSelected);
+      document.querySelector("p.calendar").textContent = `Wybrano stację: ${stationName}`
+      document.getElementById("generate-button-chart").disabled = false;
     },
   },
   mounted() {

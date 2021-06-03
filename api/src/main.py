@@ -5,9 +5,19 @@ import pytz
 from map import get_map
 from data import get_stations, get_station_data
 from validator import validate_params
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+origins = [
+    "http://localhost:8080"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/map/")
 async def map_root(rect: str, width: int = 800, param: str = 'pm25', date: str = 'latest', segments_x: int = 8):
