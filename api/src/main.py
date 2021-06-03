@@ -1,16 +1,16 @@
-from datetime import datetime, timedelta
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 import pytz
+from fastapi.security import OAuth2PasswordRequestForm
+
 from map import get_map
 from data import get_stations, get_station_data
 from validator import validate_params
 from fastapi.middleware.cors import CORSMiddleware
 from user_model import *
-from admin_usage import *
+from admin import change_config, Config
 
 app = FastAPI()
-
 
 origins = [
     "http://localhost:8080"
@@ -24,9 +24,9 @@ app.add_middleware(
 )
 
 
-@app.post("/admin_page")
+@app.post("/admin")
 async def admin_page(config: Config, current_user: User = Depends(get_current_user)):
-    if current_user.accLvl != 3:
+    if current_user.access_level < 3:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unathorized access",
