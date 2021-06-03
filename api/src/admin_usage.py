@@ -16,4 +16,4 @@ def change_config(config):
     with open(os.path.join(os.path.dirname(__file__), 'color_config.yaml')) as f:
         color_data = yaml.safe_load(f)
 
-    
+

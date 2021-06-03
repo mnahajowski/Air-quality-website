@@ -4,6 +4,7 @@
     <router-view></router-view>
     <footer>
       <p>&copy; Marcin Nahajowski Maciej Markiewicz 2021</p>
+      <router-link to="/token"><a>Admin</a></router-link>
     </footer>
   </div>
 </template>
@@ -49,6 +50,15 @@ footer p {
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
+}
+
+footer a {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 14px;
 }
 
 
