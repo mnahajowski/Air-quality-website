@@ -25,3 +25,12 @@ def change_config(config):
 
     with open(file_path, 'w') as f:
         yaml.safe_dump(color_data, f, default_flow_style=False)
+
+
+def get_config():
+    file_path = os.path.join(os.path.dirname(__file__), 'color_config.yaml')
+    with open(file_path) as f:
+        color_data = yaml.safe_load(f)
+
+    for config in color_data.values():
+        return dict(enumerate(config.values(), start=1))

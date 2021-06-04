@@ -8,7 +8,7 @@ from data import get_stations, get_station_data
 from validator import validate_params
 from fastapi.middleware.cors import CORSMiddleware
 from user_model import *
-from admin import change_config, Config
+from admin import change_config, Config, get_config
 
 app = FastAPI()
 
@@ -24,8 +24,14 @@ app.add_middleware(
 )
 
 
-@app.post("/admin")
+@app.get("/admin/config")
+async def admin_config():
+    return {'config': get_config()}
+
+
+@app.post("/admin/config")
 async def admin_page(config: Config, current_user: User = Depends(get_current_user)):
+    print(current_user)
     if current_user.access_level < 3:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -39,7 +45,7 @@ async def admin_page(config: Config, current_user: User = Depends(get_current_us
 
 @app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+import sqlite3
 from jose import jwt, JWTError
 from pydantic import BaseModel
 from typing import Optional
@@ -15,22 +15,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "access_level:": 3
-    },
-    "johndoe2": {
-        "username": "johndoe2",
-        "full_name": "John Doe2",
-        "email": "johndoe2@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "access_level": 1
-    }
-}
 
 
 class Token(BaseModel):
@@ -64,14 +48,21 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
+def get_user(username: str):
+    file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), os.pardir, 'users.db'))
+    connection = sqlite3.connect(file_path)
+    result = connection.execute(f"""SELECT * FROM Users WHERE username = '{username}'""")
+    user = [{"username": username, "email": email, "full_name": full_name, "access_level": access_level,
+             "hashed_password": hashed_password} for username, email, full_name,
+                                                     access_level, hashed_password in result]
+
+    if user:
+        user_dict = user[0]
         return UserInDB(**user_dict)
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
+def authenticate_user(username: str, password: str):
+    user = get_user(username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -104,7 +95,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
