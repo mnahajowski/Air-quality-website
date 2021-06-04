@@ -56,7 +56,7 @@ def select_stations():
 def select_stations_data(id_station, date_from, time_from, date_to, time_to, param):
     connection, cursor = _connect()
 
-    expression = f"""SELECT measurement_date, measurement_time, {param}
+    expression = f"""SELECT DISTINCT measurement_date, measurement_time, {param}
                      FROM pollution
                      WHERE id_station = {id_station} AND
                          ((measurement_date = '{date_from}' AND measurement_time >= '{time_from}' AND

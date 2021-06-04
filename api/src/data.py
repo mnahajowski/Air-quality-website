@@ -21,7 +21,7 @@ def get_station_data(id_station, date_from, date_to, param):
     end = datetime.strptime(date_to, '%Y-%m-%dT%H:%M:%S')
     expected_dates = [base + timedelta(hours=x) for x in range(int((end - base).total_seconds() / 3600))]
 
-    data = {parse_date_and_time(row['date'], row['time']): row['value'] for row in data}
+    data = {parse_date_and_time(str(row['date']), str(row['time'])): row['value'] for row in data}
     result = [{**split_date_and_time(date), 'value': data.get(date, 0)} for date in expected_dates]
 
     return result
