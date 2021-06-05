@@ -7,7 +7,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from dao import insert, select
+from dao import insert, select, get_last_table_stations
+from get_stations import get_stations
 
 MAP_URL = 'https://powietrze.gios.gov.pl/pjp/current'
 
@@ -17,6 +18,9 @@ def get_pollution_data():
     Runs pollution data download
     :return: a list of records
     """
+    if get_last_table_stations() != datetime.now().date():
+        get_stations()
+
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")

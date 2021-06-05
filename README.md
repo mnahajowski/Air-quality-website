@@ -8,3 +8,8 @@ interpolacji przestrzennej IDW. Moduł pobierania danych pozyskuje je w formacie
 [API](https://powietrze.gios.gov.pl/pjp/content/api) oraz ze strony https://powietrze.gios.gov.pl/pjp/current.
 Trzeci moduł odpowiedzialny jest za utrzymywanie bazy danych pomiarowych w PostgreSQL. 
 Czwarty zawiera frontend aplikacji.
+
+## Licencja 
+
+Niniejszy algorytm wraz z usługą zostały udostępnione przez Laboratorium technologii usługowych i sieciowych Wydziału Informatyki i Zarządzania Politechniki Wrocławskiej. 
+Szczegóły licencji na jakiej ten projekt został udostępniony można znaleźć w pliku LICENSE.

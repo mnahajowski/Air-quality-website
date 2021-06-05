@@ -58,3 +58,20 @@ def select(table, columns, where=None):
     connection.close()
 
     return res
+
+
+def get_last_table_stations():
+    """
+    Return date from the last row of stations table
+    :return: date returned from database or None
+    """
+    connection = psycopg2.connect(dbname='air_data', user='docker', password='docker', host='dbserver')
+    cursor = connection.cursor()
+    expression = f"SELECT measuremet_date FROM stations ORDER BY measurement_date LIMIT 1"
+
+    cursor.execute(expression)
+    res = list(cursor.fetchall())
+    if res:
+        return res[0][0]
+    else:
+        return None
