@@ -67,7 +67,7 @@ def get_last_table_stations():
     """
     connection = psycopg2.connect(dbname='air_data', user='docker', password='docker', host='dbserver')
     cursor = connection.cursor()
-    expression = f"SELECT measuremet_date FROM stations ORDER BY measurement_date LIMIT 1"
+    expression = f"SELECT date FROM stations ORDER BY date DESC LIMIT 1"
 
     cursor.execute(expression)
     res = list(cursor.fetchall())
