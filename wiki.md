@@ -77,9 +77,9 @@ Aby uruchomić aplikację należy sklonować repozytorium, a następnie w głów
 ## 4. Pozyskanie danych testowych
 Aplikacja nastawiona jest na zbieranie danych przez cały czas jej uruchomienia. W związku z tym
 w momencie pierwszego uruchomienie baza danych jest pusta. Możliwe jest jednak ręczne uzyskanie
-danych testowych poprzez wywołanie na kontenerze data_source (id do pobrania przez `docker ps`)
-`docker exec [id_kontenera] "python /app/get_stations.py"`, 
+danych testowych poprzez wywołanie na kontenerze data_source (najłatwiej można to wykonać przez Docker Desktop otwierając cli kontenera)
+`python /app/get_stations.py`, 
 by uzyskać aktualne dane o aktywnych stacjach pomiarowych oraz wywołanie 
-`docker exec [id_kontenera] "python /app/get_pollution_data.py"` 
-celem uzyskania aktualnych danych z aktywnych stacji pomiarowych. Można to również wykonać przez Docker Desktop z CLI 
+`python /app/get_pollution_data.py` 
+celem uzyskania aktualnych danych z aktywnych stacji pomiarowych. 
 danego kontenera. Dostępne są wówczas dane z godziny obecnej.
