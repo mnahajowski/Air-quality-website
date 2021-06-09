@@ -49,12 +49,17 @@ def get_password_hash(password):
 
 
 def get_user(username: str):
+    """
+    Retrieve a specific user from the database
+    :param username: username
+    :return: requested user data, or None
+    """
     file_path = os.path.normpath(os.path.join(os.path.dirname(__file__), os.pardir, 'users.db'))
     connection = sqlite3.connect(file_path)
     result = connection.execute(f"""SELECT * FROM Users WHERE username = '{username}'""")
     user = [{"username": username, "email": email, "full_name": full_name, "access_level": access_level,
-             "hashed_password": hashed_password} for username, email, full_name,
-                                                     access_level, hashed_password in result]
+             "hashed_password": hashed_password} for username, email, full_name, access_level, hashed_password
+            in result]
 
     if user:
         user_dict = user[0]
@@ -62,6 +67,12 @@ def get_user(username: str):
 
 
 def authenticate_user(username: str, password: str):
+    """
+    Authenticate user by password
+    :param username: username
+    :param password: provided password
+    :return: user or False
+    """
     user = get_user(username)
     if not user:
         return False
@@ -71,6 +82,12 @@ def authenticate_user(username: str, password: str):
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    """
+    Create an access token for a specific user
+    :param data: token data
+    :param expires_delta: expiry date
+    :return: encoded jwt token
+    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -82,6 +99,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+    """
+    Get user from token
+    :param token: jwt token
+    :return: user or HTTPException 401 is raised
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

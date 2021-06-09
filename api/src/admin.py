@@ -12,7 +12,11 @@ class Config(BaseModel):
     level5: Optional[List[int]] = None
 
 
-def change_config(config):
+def change_config(config: Config) -> None:
+    """
+    Update the current config to match a provided model
+    :param config: new config
+    """
     config = config.dict()
     file_path = os.path.join(os.path.dirname(__file__), 'color_config.yaml')
     with open(file_path) as f:
@@ -28,6 +32,10 @@ def change_config(config):
 
 
 def get_config():
+    """
+    Get current color values from the config
+    :return: a dict like {1: [R, G, B], 2: ...} for levels 1-5
+    """
     file_path = os.path.join(os.path.dirname(__file__), 'color_config.yaml')
     with open(file_path) as f:
         color_data = yaml.safe_load(f)

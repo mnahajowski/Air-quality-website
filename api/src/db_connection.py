@@ -38,6 +38,10 @@ JOIN B on A.id_station = B.id_station;"""
 
 
 def select_stations():
+    """
+    Select all stations
+    :return: a list of dicts {"id": id_station, 'name': name, 'lat': lat, 'lon': lon}
+    """
     connection, cursor = _connect()
 
     expression = f"""SELECT DISTINCT id_station, name, lat, lon
@@ -54,6 +58,16 @@ def select_stations():
 
 
 def select_stations_data(id_station, date_from, time_from, date_to, time_to, param):
+    """
+    Get pollution data for a specific station
+    :param id_station: station id
+    :param date_from: date to start, inclusive
+    :param time_from: time to start, inclusive
+    :param date_to: end date, exclusive
+    :param time_to: end time, exclusive
+    :param param: air pollution parameter
+    :return: a list of records {"date": date, 'time': time, 'value': value} of available data
+    """
     connection, cursor = _connect()
 
     expression = f"""SELECT DISTINCT measurement_date, measurement_time, {param}
@@ -70,7 +84,6 @@ def select_stations_data(id_station, date_from, time_from, date_to, time_to, par
     cursor.execute(expression)
     data = [{"date": date, 'time': time, 'value': value}
             for date, time, value in cursor.fetchall()]
-
 
     cursor.close()
     connection.close()

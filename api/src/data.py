@@ -15,6 +15,14 @@ def split_date_and_time(date):
 
 
 def get_station_data(id_station, date_from, date_to, param):
+    """
+    Get pollution data for a specific station
+    :param id_station: station id
+    :param date_from: date to start, inclusive
+    :param date_to: end date, exclusive
+    :param param: air pollution parameter
+    :return: list of records {'time', 'date', 'value'} filled with 0 for no data
+    """
     data = select_stations_data(id_station, *date_from.split('T'), *date_to.split('T'), param)
 
     base = datetime.strptime(date_from, '%Y-%m-%dT%H:%M:%S')

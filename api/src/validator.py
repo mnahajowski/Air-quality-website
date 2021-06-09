@@ -3,6 +3,16 @@ from fastapi import HTTPException
 
 
 def validate_params(rect: str, width: int, param: str, date: str, segments_x: int):
+    """
+    Validate map endpoint parameters
+    :param rect: rect parameter
+    :param width: width parameter
+    :param param: air quality param parameter
+    :param date: date parameter
+    :param segments_x: number of segments parameter
+    :return: None
+    :raises: HTTPException 404 on wrong data
+    """
     try:
         rect = [float(coord) for coord in rect.split(',')]
         if not (0 <= rect[0] <= 90 and 0 <= rect[2] <= 90 and 0 <= rect[1] <= 180 and 0 <= rect[3] <= 180):

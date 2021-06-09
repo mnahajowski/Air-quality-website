@@ -24,41 +24,6 @@ app.add_middleware(
 )
 
 
-@app.get("/admin/config")
-async def admin_config():
-    return {'config': get_config()}
-
-
-@app.post("/admin/config")
-async def admin_page(config: Config, current_user: User = Depends(get_current_user)):
-    print(current_user)
-    if current_user.access_level < 3:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unathorized access",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    else:
-        change_config(config)
-        return {'success': True}
-
-
-@app.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
-
-
 @app.get("/map/")
 async def map_root(rect: str, width: int = 800, param: str = 'pm25', date: str = 'latest', segments_x: int = 8):
     """
@@ -105,6 +70,55 @@ async def stations(id: int, date_from: str = None, date_to: str = None, param: s
         date_to = now.strftime("%Y-%m-%dT%H:00:00")
 
     return {"data": get_station_data(id, date_from, date_to, param)}
+
+
+@app.get("/admin/config")
+async def admin_config():
+    """
+    Get current color config in format for the 5 color levels
+    :return: json in format {"config": {1: [R, G, B], 2: [R, G, B] ...}}
+    """
+    return {'config': get_config()}
+
+
+@app.post("/admin/config")
+async def admin_page(config: Config, current_user: User = Depends(get_current_user)):
+    """
+    Set the color config for the app
+    :param config: config in format {level1: [R, G, B], level2: ...}
+    :param current_user: a jwt token from the /token endpoint is required in the header
+    :return: 200 success response, or 401 UNAUTHORIZED code
+    """
+    if current_user.access_level < 3:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unathorized access",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    else:
+        change_config(config)
+        return {'success': True}
+
+
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+    Obtain a jwt token for a specific user
+    :param form_data: password and login
+    :return: json in format {"access_token": access_token, "token_type": "bearer"} or 401 code
+    """
+    user = authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @app.get("/")

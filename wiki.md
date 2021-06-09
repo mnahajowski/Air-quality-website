@@ -56,12 +56,12 @@ parametr domyślny PM2.5, domyślne 8 segmentów:
 ### Zastosowany algorytm
 
 Metoda IDW (ang. Inverse Distance Weighted) nazywana również metodą średniej ważonej odległością opiera się na tym, że wartość dla szacowanego punktu jest bardziej 
-skorelowana z bliższymi punktami pomiarowymi niż z dalszymi [1]. Algorytm działania metody IDW opiera się na tym, że dla każdego szacowanego punktu wykonywane są czynności: 
+skorelowana z bliższymi punktami pomiarowymi niż z dalszymi. Algorytm działania metody IDW opiera się na tym, że dla każdego szacowanego punktu wykonywane są czynności: 
 1. Obranie punktu o współrzędnych (x,y), który jest środkiem komórki, w której ma być obliczona wartość. 
 2. Założenie, że punkt (x,y) jest środkiem koła o promieniu równym r. 
 3. Wskazanie punktów pomiarowych (xi, yi) leżących w kole wyznaczonym w poprzednim kroku. 
 4. Zmierzenie odległości pomiędzy każdym punktem pomiarowym (xi, yi) a środkiem koła (x,y) i obliczenie wag według wzorów (2) i (3). 
-5. Obliczenie wartości F w punkcie (x,y) według wzoru (1) dla całej komórki [2].
+5. Obliczenie wartości F w punkcie (x,y) według wzoru (1) dla całej komórki.
 
 
 
@@ -77,8 +77,9 @@ Aby uruchomić aplikację należy sklonować repozytorium, a następnie w głów
 ## 4. Pozyskanie danych testowych
 Aplikacja nastawiona jest na zbieranie danych przez cały czas jej uruchomienia. W związku z tym
 w momencie pierwszego uruchomienie baza danych jest pusta. Możliwe jest jednak ręczne uzyskanie
-danych testowych poprzez wywołanie na kontenerze data_source 
-`docker exec [nazwa_kontenera] "python get_stations.py"`, 
+danych testowych poprzez wywołanie na kontenerze data_source (id do pobrania przez `docker ps`)
+`docker exec [id_kontenera] "python /app/get_stations.py"`, 
 by uzyskać aktualne dane o aktywnych stacjach pomiarowych oraz wywołanie 
-`docker exec [nazwa_kontenera] "python get_pollution_data.py"` 
-celem uzyskania aktualnych danych z aktywnych stacji pomiarowych. Dostępne są wówczas dane z godziny obecnej.
+`docker exec [id_kontenera] "python /app/get_pollution_data.py"` 
+celem uzyskania aktualnych danych z aktywnych stacji pomiarowych. Można to również wykonać przez Docker Desktop z CLI 
+danego kontenera. Dostępne są wówczas dane z godziny obecnej.
